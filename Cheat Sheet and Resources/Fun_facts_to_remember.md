@@ -36,6 +36,18 @@ func namedReturnValues(s int) (n int, f bool) {
 }
 ```
 
+### ptr: defer statement executes like a stack
+
+with defer, you can schedule function calls to happen at the end of your function! fun fact: when you defer multiple calls, they'll be executed in reverse order when your function finishes! that is like, when you make a defer call, it enters a stack, and each function executes like popping those defer calls from a stack.
+
+e.g.
+```go
+func Example() {
+    defer fmt.Println("called first")  // But This will be executed third.
+    defer fmt.Println("called second") // But This will be executed second.
+    defer fmt.Println("called third")  // But This will be executed first.
+}
+```
 
 
 
