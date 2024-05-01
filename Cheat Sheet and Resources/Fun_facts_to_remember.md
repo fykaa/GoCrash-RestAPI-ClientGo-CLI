@@ -49,5 +49,14 @@ func Example() {
 }
 ```
 
+### Data: allocation with `new` keyword
+
+`new` is a built-in function that only allocates memory, it doesn't initialize it. so when you do `new(T)`, it allocates zeroed storage for a new item of type T and returns its address, which is a value of type *T (pointer to T) .
+e.g.
+```go
+// You can create one with new or just declare it
+p := new(int)  // p is of type *int
+var v int      // v is of type int
+```
 
 
