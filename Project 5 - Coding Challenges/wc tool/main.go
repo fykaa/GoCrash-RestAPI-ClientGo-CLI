@@ -1,9 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
-	"bufio"
 	"os"
 	"unicode/utf8"
 )
@@ -15,28 +15,37 @@ func initFlag() {
 	m := flag.Bool("m", false, "print the character count")
 	flag.Parse()
 	files := flag.Args()
+	if len(files) == 0 {
+		scanner := bufio.NewScanner(os.Stdin)
+		for scanner.Scan() {
+			if scanner.Text() == "" {
+				break // Exit loop if an empty line is entered
+			}
+			files = append(files, scanner.Text())
+		}
+	}
 	if *c {
 		result := cflag(files)
-		if len(files)!=1 {
+		if len(files) != 1 {
 			fmt.Println(result, "total")
 		}
 	}
-	
+
 	if *l {
 		result := lflag(files)
-		if len(files)!=1 {
+		if len(files) != 1 {
 			fmt.Println(result, "total")
 		}
 	}
 	if *w {
 		result := wflag(files)
-		if len(files)!=1 {
+		if len(files) != 1 {
 			fmt.Println(result, "total")
 		}
 	}
 	if *m {
 		result := mflag(files)
-		if len(files)!=1 {
+		if len(files) != 1 {
 			fmt.Println(result, "total")
 		}
 	}
@@ -62,7 +71,7 @@ func cflag(files []string) int64 {
 			continue
 		}
 		fileInfo, err := file.Stat()
-		if err!= nil {
+		if err != nil {
 			fmt.Println("Cannot find fileInfo for: ", fileInfo.Name(), err)
 			continue
 		}
@@ -78,29 +87,29 @@ func lflag(files []string) int {
 		l := 0
 		file, err := os.Open(arg)
 		defer file.Close()
-		if err!=nil {
+		if err != nil {
 			errStatement(err)
 			continue
 		}
 		scanner := bufio.NewScanner(file)
 		scanner.Split(bufio.ScanLines)
-		
+
 		for scanner.Scan() {
 			l++
 		}
 		fmt.Println(l-1, arg)
-		result += l-1
+		result += l - 1
 	}
 	return result
 }
 
-func wflag(files []string) int{
+func wflag(files []string) int {
 	var result int
 	for _, arg := range files {
 		w := 0
 		file, err := os.Open(arg)
 		defer file.Close()
-		if err!=nil {
+		if err != nil {
 			errStatement(err)
 			continue
 		}
@@ -121,7 +130,7 @@ func mflag(files []string) int {
 		m := 0
 		file, err := os.Open(arg)
 		defer file.Close()
-		if err!= nil {
+		if err != nil {
 			errStatement(err)
 			continue
 		}
